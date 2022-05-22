@@ -1,12 +1,11 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+  <div>用户管理</div>
 </template>
+
 <script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({})
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>

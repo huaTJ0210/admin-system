@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Layout from '@/components/layout/index.vue'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
-// 路由规则配置
+// 路由配置规则
 const routes: Array<RouteConfig> = [
   {
     path: '/login',
@@ -14,9 +15,12 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     component: Layout,
+    meta: {
+      requiresAuth: true
+    },
     children: [
       {
-        path: '/', // 默认子路由
+        path: '', // 默认子路由
         name: 'home',
         component: () => import(/* webpackChunkName: 'home' */ '@/views/home/index.vue'),
         meta: {
@@ -78,6 +82,75 @@ const routes: Array<RouteConfig> = [
         meta: {
           title: '广告位管理'
         }
+      },
+      {
+        path: '/menu/create',
+        name: 'menu-create',
+        component: () => import(/* webpackChunkName: 'menu-create-edit' */ '@/views/menu/create.vue'),
+        meta: {
+          title: '菜单创建'
+        }
+      },
+      {
+        path: '/menu/:id/edit',
+        name: 'menu-edit',
+        component: () => import(/* webpackChunkName: 'menu-create-edit' */ '@/views/menu/edit.vue'),
+        meta: {
+          title: '菜单编辑'
+        }
+      },
+      {
+        path: '/role/:roleId/alloc-menu',
+        name: 'alloc-menu',
+        component: () => import(/* webpackChunkName: 'alloc-menu' */ '@/views/role/alloc-menu.vue'),
+        props: true, // 将路由路径参数映射到组件的 props 数据中
+        meta: {
+          title: '角色创建'
+        }
+      },
+      {
+        path: '/role/:roleId/alloc-resource',
+        name: 'alloc-resource',
+        component: () => import(/* webpackChunkName: 'alloc-menu' */ '@/views/role/alloc-resource.vue'),
+        props: true, // 将路由路径参数映射到组件的 props 数据中
+        meta: {
+          title: '资源创建'
+        }
+      },
+      {
+        path: '/course/create',
+        name: 'course-create',
+        component: () => import(/* webpackChunkName: 'course-create' */ '@/views/course/create.vue'),
+        meta: {
+          title: '课程创建'
+        }
+      },
+      {
+        path: '/course/:courseId/edit',
+        name: 'course-edit',
+        component: () => import(/* webpackChunkName: 'course-edit' */ '@/views/course/edit.vue'),
+        props: true,
+        meta: {
+          title: '课程编辑'
+        }
+      },
+      {
+        path: '/course/:courseId/section',
+        name: 'course-section',
+        component: () => import(/* webpackChunkName: 'course-section' */ '@/views/course/section.vue'),
+        props: true,
+        meta: {
+          title: '添加章节'
+        }
+      },
+      {
+        path: '/course/:courseId/video',
+        name: 'course-video',
+        component: () => import(/* webpackChunkName: 'course-video' */ '@/views/course/video.vue'),
+        props: true,
+        meta: {
+          title: '添加视频'
+        }
       }
     ]
   },
@@ -90,6 +163,32 @@ const routes: Array<RouteConfig> = [
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  // to.matched 是一个数组（匹配到是路由记录）
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!(store.state as any).user) {
+      // 跳转到登录页面
+      next({
+        name: 'login',
+        query: {
+          // 通过 url 传递查询字符串参数
+          redirect: to.fullPath // 把登录成功需要返回的页面告诉登录页面
+        }
+      })
+    } else {
+      next() // 允许通过
+    }
+  } else {
+    next() // 允许通过
+  }
+
+  // // 路由守卫中一定要调用 next，否则页码无法展示
+  // next()
+  // if (to.path !== '/login') {
+  //   // 校验登录状态
+  // }
 })
 
 export default router

@@ -7,17 +7,21 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "preview": "node test-serve/app.js"
   },
   "dependencies": {
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.8",
+    "moment": "^2.29.3",
+    "qs": "^6.10.3",
     "vue": "^2.6.14",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.5.1",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "wangeditor": "^4.7.15"
   },
   "devDependencies": {
     "@types/chai": "^4.2.15",
@@ -42,6 +46,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^8.0.3",
+    "express": "^4.18.1",
+    "http-proxy-middleware": "^2.0.6",
     "lint-staged": "^11.1.2",
     "sass": "^1.32.7",
     "sass-loader": "^12.0.0",
